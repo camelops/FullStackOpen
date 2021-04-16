@@ -1,0 +1,13 @@
+
+GET http://localhost:3001/api/blogs
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "First Blog",
+    "author": "Haley Whitman",
+    "url": "http://www.urltomyblog.com",
+    "likes": 32
+}
