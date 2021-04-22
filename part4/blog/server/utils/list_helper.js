@@ -37,7 +37,7 @@ const mostBlogs = (blogs) => {
 
   blogs.forEach(function(blog) {
     if (dict[blog.author] != null){
-      dict[blog.author] = dict[blog.author] + 1
+      dict[blog.author] += 1
     } else {
       dict[blog.author] = 1
     } 
@@ -57,10 +57,38 @@ const mostBlogs = (blogs) => {
 
   return result
 }
+
+const mostLikes = (blogs) => {
+  let result = {}
+  let dict = {}
+
+  blogs.forEach(function(blog) {
+    if (dict[blog.author] != null){
+      dict[blog.author] += blog.likes
+    } else {
+      dict[blog.author] = blog.likes
+    } 
+  })
+
+  let max_likes = 0
+
+  for(let key in dict) {
+    if(dict[key] > max_likes) {
+      result = {
+        author: key,
+        blogs: dict[key]
+      }
+      max_likes = dict[key]
+    }
+  }
+
+  return result
+}
   
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
