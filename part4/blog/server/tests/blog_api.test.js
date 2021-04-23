@@ -28,8 +28,7 @@ test('Blogs have Unique IDs', async () => {
   expect(response.body[0].id).toBeDefined()
 })
 
-test('A valid blog post can be addedd', async () => {
-
+test('A valid blog post can be added', async () => {
   const newBlog = {
     title: 'Test Blog',
     author: 'Tester McTest',
@@ -51,8 +50,25 @@ test('A valid blog post can be addedd', async () => {
   expect(contents).toContain(
     'Test Blog'
   )
+})
 
+test('A new blog without likes will be set to 0', async () => {
+  const newBlog = {
+    title: 'TEST: No likes',
+    author: 'Tester McTest',
+    url: 'https://test.com/',
+  }
 
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogs = await helper.blogsInDb()
+  const content = blogs.find(n => n.title === 'TEST: No likes')
+
+  expect(content.likes).toEqual(0)
 })
 
 
