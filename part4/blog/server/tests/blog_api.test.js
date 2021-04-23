@@ -99,6 +99,27 @@ test('blog without title is not added', async () => {
 
 })
 
+describe('deletion of a blog post', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogAtStart = await helper.blogsInDb()
+    const blogToDelete = blogAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBlog.length - 1
+    )
+
+    const contents = blogsAtEnd.map(r => r.title)
+
+    expect(contents).not.toContain(blogToDelete.title)
+  })
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
