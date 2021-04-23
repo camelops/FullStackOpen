@@ -19,6 +19,11 @@ blogRouter.post('/', (request, response) => {
     url: body.url,
     likes: (body.likes === undefined) ? 0 : body.likes
   })
+
+  if (blog.title === undefined || blog.url === undefined) {
+    response.status(400).end()
+    return
+  }
   
   blog
     .save()
