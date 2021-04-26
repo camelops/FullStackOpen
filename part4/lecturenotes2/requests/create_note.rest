@@ -1,0 +1,21 @@
+
+GET http://localhost:3001/api/notes
+
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "VS Code REST client is working",
+    "important": false
+}
+
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "VS Code REST client is working",
+    "important": false,
+    "userId": "6086eff8b76ef854745f0d8c"
+} 
