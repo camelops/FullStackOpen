@@ -13,6 +13,8 @@ beforeEach(async () => {
     let blogObject = new Blog(blog)
     await blogObject.save()
   }
+
+  jest.spyOn(console, 'warn').mockImplementation(() => {})
 })
 
 describe('Blog Editing and Creation', () => {
@@ -92,8 +94,6 @@ describe('Blog Editing and Creation', () => {
     let blogToEdit = blogAtStart[0]
 
     blogToEdit.likes += 1
-
-    console.log(blogToEdit.id)
 
     await api
       .put(`/api/blogs/${blogToEdit.id}`)
