@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const helper = require('./test_helper')
 const mongoose = require('mongoose')
@@ -17,22 +16,25 @@ beforeEach(async () => {
 
 
 describe('when there is initially one user in db', () => {
-  beforeEach(async () => {
-    await User.deleteMany({})
+  // beforeEach(async () => {
+  //   await User.deleteMany({})
 
-    const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({ username: 'root', passwordHash })
+  //   const passwordHash = await bcrypt.hash('sekret', 10)
+  //   const user = new User({ username: 'root', passwordHash })
 
-    await user.save()
-  })
+  //   await user.save()
+  // })
+})
+
+describe('User Creation Rules', () => {
 
   test('creation succeeds with a fresh username', async () => {
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {
-      username: 'mluukkai',
+      username: 'Dune',
       name: 'Matti Luukkainen',
-      password: 'salainen',
+      password: 'camels',
     }
 
     await api
@@ -67,6 +69,85 @@ describe('when there is initially one user in db', () => {
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
   })
+
+  test('Password cannot be shorter than 3 characters', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'passwordShort',
+      name: 'Test: Short Password',
+      password: 'a2',
+    }
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('Username/Password must be at least three characters')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('Username cannot be shorter than 3 characters', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'us',
+      name: 'Test: Short Username',
+      password: 'a23123',
+    }
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('Username/Password must be at least three characters')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('Password cannot be missing', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'Tester',
+      name: 'Test: No Password',
+    }
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('Username/Password cannot be missing.')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('Username cannot be missing', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      name: 'Test: No Password',
+      password: 'TestPassword'
+    }
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('Username/Password cannot be missing.')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
 })
 
 afterAll(() => {
