@@ -11,3 +11,14 @@ Content-Type: application/json
     "url": "http://www.urltomyblog.com",
     "likes": 32
 }
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Second Blog",
+    "author": "Haley Whitman",
+    "url": "http://www.urltomyblog.com",
+    "likes": 212
+}

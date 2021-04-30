@@ -1,5 +1,6 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const mongoose = require('mongoose')
 
 const initialBlog = [
   {
@@ -8,7 +9,8 @@ const initialBlog = [
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
     likes: 7,
-    __v: 0
+    user: mongoose.Types.ObjectId('608b815e27b6f568b421a729'),
+    __v: 0,
   },
   {
     _id: '5a422aa71b54a676234d17f8',
@@ -16,6 +18,7 @@ const initialBlog = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
+    user: mongoose.Types.ObjectId('608b815e27b6f568b421a729'),
     __v: 0
   },
   {
@@ -24,6 +27,7 @@ const initialBlog = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 12,
+    user: mongoose.Types.ObjectId('608b815e27b6f568b421a729'),
     __v: 0
   },
   {
@@ -32,6 +36,7 @@ const initialBlog = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
     likes: 10,
+    user: mongoose.Types.ObjectId('608b815e27b6f568b421a729'),
     __v: 0
   },
   {
@@ -40,6 +45,7 @@ const initialBlog = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
+    user: mongoose.Types.ObjectId('608b815e27b6f568b421a728'),
     __v: 0
   },
   {
@@ -48,6 +54,7 @@ const initialBlog = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2,
+    user: mongoose.Types.ObjectId('608b815e27b6f568b421a728'),
     __v: 0
   }  
 ]
@@ -57,19 +64,19 @@ const initialUsers = [
     notes: [],
     username: 'root',
     name: 'superuser',
-    id: '5c470be33e69c862b17964'
+    id: '608b815e27b6f568b421a728'
   },
   {
     notes: [],
     username: 'mluukkai',
     name: 'Matti Luukkainen',
-    id: '5c470bd33e69c862b1796863'
+    id: '608b815e27b6f568b421a729'
   }
 
 ]
 
 const nonExistingId = async () => {
-  const blog = new Blog({ title: 'willremovethissoon', author: 'toremove', url: 'toremove', likes:0 })
+  const blog = new Blog({ title: 'willremovethissoon', author: 'toremove', url: 'toremove', user: 'dud', likes:0 })
   await blog.save()
   await blog.remove()
 

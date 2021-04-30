@@ -6,24 +6,31 @@ const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-
-  for (let blog of helper.initialBlog) {
-    let blogObject = new Blog(blog)
-    await blogObject.save()
-  }
-
-  jest.spyOn(console, 'warn').mockImplementation(() => {})
-})
-
 describe('Blog Editing and Creation', () => {
+  
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlog)
+
+    // for (let blog of helper.initialBlog) {
+    //   let blogObject = new Blog(blog)
+    //   await blogObject.save()
+    // }
+
+  })
+
   test('A valid blog post can be added', async () => {
+
+    let test_user = await helper.usersInDb()
+    test_user = test_user[0]
+    console.log(test_user)
+
     const newBlog = {
       title: 'Test Blog',
       author: 'Tester McTest',
       url: 'https://test.com/',
       likes: 13,
+      user: test_user._id
     }
   
     await api
@@ -118,6 +125,12 @@ describe('Blog Editing and Creation', () => {
 
 
 describe('Blog Retrieval', () => {
+
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlog)
+  })
+
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
   
@@ -134,6 +147,13 @@ describe('Blog Retrieval', () => {
 
 
 describe('deletion of a blog post', () => {
+  
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlog)
+  })
+
+
   test('succeeds with status code 204 if id is valid', async () => {
     const blogAtStart = await helper.blogsInDb()
     const blogToDelete = blogAtStart[0]
