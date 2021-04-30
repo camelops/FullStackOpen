@@ -16,7 +16,8 @@ blogRouter.post('/', async (request, response) => {
     return
   }
 
-  //const user = await User.findById(body.userId)
+  // const user = await User.findById(body.userId)
+
   const users = await User.find({})
   const user = users[0]
   console.log(users[0])
