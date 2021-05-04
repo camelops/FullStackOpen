@@ -22,3 +22,16 @@ Content-Type: application/json
     "url": "http://www.urltomyblog.com",
     "likes": 212
 }
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbWVsIiwiaWQiOiI2MDhjM2I0OGEyN2E2ZDJhYzg5MTZlOGQiLCJpYXQiOjE2MjAxNDgxMzV9.JHmjAFDnnumObP-P9uBvp7_HZYj2SBw_emSDvD4j8vM
+
+{
+    "title": "Authorized Blog",
+    "author": "Haley Whitman",
+    "url": "http://www.urltomyauthorizedblog.com",
+    "likes": 2122
+}
+
