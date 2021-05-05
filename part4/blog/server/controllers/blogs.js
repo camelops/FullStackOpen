@@ -1,19 +1,21 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+const middleware = require('../utils/middleware')
 
 
-const retrieveUser = async (request, response) => {
-  // Authenticating User before adding blog 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid'})
-  }
-  const user = await User.findById(decodedToken.id)
-  console.log(user)
-  return user
-}
+// const User = require('../models/user')
+
+
+// const retrieveUser = async (request, response) => {
+//   // Authenticating User before adding blog 
+//   const decodedToken = jwt.verify(request.token, process.env.SECRET)
+//   if (!decodedToken.id) {
+//     return response.status(401).json({ error: 'token missing or invalid'})
+//   }
+//   const user = await User.findById(decodedToken.id)
+//   console.log(user)
+//   return user
+// }
 
 blogRouter.get('/', async (request, response) => {
   const blog = await Blog
@@ -21,11 +23,12 @@ blogRouter.get('/', async (request, response) => {
   response.json(blog)
 })
   
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   const body = request.body
+  const user = request.user
 
   // Authenticating User before adding blog 
-  const user = await retrieveUser(request, response)
+  // const user = await retrieveUser(request, response)
 
   if (body.title === undefined || body.url === undefined) {
     response.status(400).end()
@@ -48,10 +51,11 @@ blogRouter.post('/', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-blogRouter.delete('/:id', async (request, response) => {
+blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
 
-  const user = await retrieveUser(request, response)
+  // const user = await retrieveUser(request, response)
   const blog = await Blog.findById(request.params.id)
+  const user = request.user
 
   if(blog.user.toString() === user.id) {
     await Blog.findByIdAndRemove(request.params.id)
