@@ -25,10 +25,13 @@ blogRouter.get('/', async (request, response) => {
   
 blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   const body = request.body
-  const user = request.user
+  console.log(request.user)
 
-  // Authenticating User before adding blog 
-  // const user = await retrieveUser(request, response)
+  if (request.user === undefined) {
+    response.status(401).end()
+    return
+  }
+  const user = request.user
 
   if (body.title === undefined || body.url === undefined) {
     response.status(400).end()
@@ -56,6 +59,9 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
   // const user = await retrieveUser(request, response)
   const blog = await Blog.findById(request.params.id)
   const user = request.user
+
+  console.log(blog)
+  console.log(user)
 
   if(blog.user.toString() === user.id) {
     await Blog.findByIdAndRemove(request.params.id)

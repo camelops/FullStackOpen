@@ -1,6 +1,9 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const mongoose = require('mongoose')
+const supertest = require('supertest')
+const app = require('../app')
+const api = supertest(app)
 
 const initialBlog = [
   {
@@ -93,6 +96,39 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
+const createTestUser = async () => {
+
+  const user = {
+    username: 'testUser',
+    name: 'test user',
+    password: 'test123'
+  }
+
+  // Create the User
+  const newUserResult = await api
+    .post('/api/users')
+    .send(user)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  console.log(newUserResult.body)
+  
+  expect(newUserResult.body.id).toEqual(expect.anything())
+
+  // Login with the user
+  const loginResult = await api
+    .post('/api/login')
+    .send(user)
+    .expect(200)
+  
+  expect(loginResult.body.token).toEqual(expect.anything())
+
+  user.token = loginResult.body.token
+  user.id = newUserResult.body.id
+
+  return user
+}
+
 module.exports = {
-  initialBlog, initialUsers, nonExistingId, blogsInDb, usersInDb
+  initialBlog, initialUsers, nonExistingId, blogsInDb, usersInDb, createTestUser
 }
