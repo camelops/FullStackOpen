@@ -1,0 +1,17 @@
+post http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "camel",
+  "password": "camel123"
+}
+
+###
+post http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test123"
+}
+

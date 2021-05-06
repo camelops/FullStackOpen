@@ -1,0 +1,41 @@
+
+GET http://localhost:3001/api/blogs
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "First Blog",
+    "author": "Haley Whitman",
+    "url": "http://www.urltomyblog.com",
+    "likes": 32
+}
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Second Blog",
+    "author": "Haley Whitman",
+    "url": "http://www.urltomyblog.com",
+    "likes": 212
+}
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbWVsIiwiaWQiOiI2MDkyZTkyMDI1NDU3MDQwYTg1ZTdlOGYiLCJpYXQiOjE2MjAyNTMzMzR9.f1njEN_ma_D8eXIcHq7iBzRzqKFG7juYSXjNnb-rxp8
+
+{
+    "title": "Authorized Blog",
+    "author": "Haley Whitman",
+    "url": "http://www.urltomyauthorizedblog.com",
+    "likes": 2122
+}
+
+###
+DELETE http://localhost:3001/api/blogs/60931aaa1ae1ab41886f00c8
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhbWVsIiwiaWQiOiI2MDkyZTkyMDI1NDU3MDQwYTg1ZTdlOGYiLCJpYXQiOjE2MjAyNTMzMzR9.f1njEN_ma_D8eXIcHq7iBzRzqKFG7juYSXjNnb-rxp8
