@@ -36,9 +36,7 @@ const App = () => {
 
     return (
       <div>
-        <p>
-          {message}
-        </p>
+        {message}
       </div>
     )
   }
@@ -175,11 +173,9 @@ const App = () => {
       {user === null ?
         loginForm() :
           <div>
-            <p>
-              <Notification message={notificationMessage}/>
-              {user.name} is logged in 
-              <button onClick={handleLogout}>logout</button>
-            </p>
+            <Notification message={notificationMessage}/>
+            {user.name} is logged in 
+            <button onClick={handleLogout}>logout</button>
             {createNewBlog()}
             {blogList()}
           </div>
