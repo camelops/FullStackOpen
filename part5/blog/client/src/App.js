@@ -8,6 +8,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState('some message')
 
   const [title, setBlogTitle] = useState('')
   const [author, setBlogAuthor] = useState('')
@@ -28,6 +29,20 @@ const App = () => {
     }
   }, [])
 
+  const Notification = ({ message }) => {
+    if (message === null) {
+      return null
+    }
+
+    return (
+      <div>
+        <p>
+          {message}
+        </p>
+      </div>
+    )
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()    
     try {
@@ -39,12 +54,19 @@ const App = () => {
         'loggedBlogAppUser', JSON.stringify(user)
       ) 
 
+      setNotificationMessage(`${username} has successfully logged in.`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log("Wrong Credentials")
+      setNotificationMessage(`Wrong credentials entered.`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
     }
   }
 
@@ -66,6 +88,10 @@ const App = () => {
     .create(blogObject)
     .then(returnedBlog => {
       setBlogs(blogs.concat(returnedBlog))
+      setNotificationMessage(`"${title}" by ${author} was added.`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
       setBlogTitle('')
       setBlogAuthor('')
       setBlogURL('')
@@ -73,7 +99,8 @@ const App = () => {
   }
 
   const createNewBlog = () => (
-    <div> <h2>create new</h2>
+    <div> 
+      <h2>create new</h2>
       <form onSubmit = {handleCreateBlog}>
         <div>
           title
@@ -108,27 +135,30 @@ const App = () => {
   )
 
   const loginForm = () => (
-    <form onSubmit = {handleLogin}>
-      <div>
-        username
+    <div>
+      <Notification message={notificationMessage}/>
+      <form onSubmit = {handleLogin}>
+        <div>
+          username
+            <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+            />
+        </div>
+        <div>
+          password
           <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
           />
-      </div>
-      <div>
-        password
-        <input
-        type="password"
-        value={password}
-        name="Password"
-        onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
   )
 
   const blogList = () => (
@@ -146,6 +176,7 @@ const App = () => {
         loginForm() :
           <div>
             <p>
+              <Notification message={notificationMessage}/>
               {user.name} is logged in 
               <button onClick={handleLogout}>logout</button>
             </p>
