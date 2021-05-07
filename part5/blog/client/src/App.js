@@ -9,6 +9,10 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  const [title, setBlogTitle] = useState('')
+  const [author, setBlogAuthor] = useState('')
+  const [url, setBlogURL] = useState('')
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -35,6 +39,7 @@ const App = () => {
         'loggedBlogAppUser', JSON.stringify(user)
       ) 
 
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -48,6 +53,59 @@ const App = () => {
     setUser(null)
     console.log("logout")
   }
+
+  const handleCreateBlog = async (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url
+    }
+
+    blogService
+    .create(blogObject)
+    .then(returnedBlog => {
+      setBlogs(blogs.concat(returnedBlog))
+      setBlogTitle('')
+      setBlogAuthor('')
+      setBlogURL('')
+    })
+  }
+
+  const createNewBlog = () => (
+    <div> <h2>create new</h2>
+      <form onSubmit = {handleCreateBlog}>
+        <div>
+          title
+            <input
+            type="text"
+            value={title}
+            name="BlogTitle"
+            onChange={({ target }) => setBlogTitle(target.value)}
+            />
+        </div>
+        <div>
+          author:
+            <input
+            type="text"
+            value={author}
+            name="BlogAuthor"
+            onChange={({ target }) => setBlogAuthor(target.value)}
+            />
+        </div>
+        <div>
+          url:
+            <input
+            type="text"
+            value={url}
+            name="BlogURL"
+            onChange={({ target }) => setBlogURL(target.value)}
+            />
+        </div>
+        <button type="submit">create</button>
+      </form>
+    </div>
+  )
 
   const loginForm = () => (
     <form onSubmit = {handleLogin}>
@@ -91,6 +149,7 @@ const App = () => {
               {user.name} is logged in 
               <button onClick={handleLogout}>logout</button>
             </p>
+            {createNewBlog()}
             {blogList()}
           </div>
       }
