@@ -12,12 +12,6 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState('some message')
 
-  const [title, setBlogTitle] = useState('')
-  const [author, setBlogAuthor] = useState('')
-  const [url, setBlogURL] = useState('')
-
-  const [createBlogVisible, setCreateBlogVisible] = useState(false)
-
   const blogFormRef = useRef()
 
   useEffect(() => {
@@ -45,7 +39,6 @@ const App = () => {
         {message}
       </div>
     )
-
 
   }
 
@@ -82,13 +75,7 @@ const App = () => {
     console.log("logout")
   }
 
-  const handleCreateBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const createBlog = (blogObject) => {
 
     blogFormRef.current.toggleVisibility()
 
@@ -96,13 +83,11 @@ const App = () => {
     .create(blogObject)
     .then(returnedBlog => {
       setBlogs(blogs.concat(returnedBlog))
-      setNotificationMessage(`"${title}" by ${author} was added.`)
+      setNotificationMessage(`"${returnedBlog.title}" by ${returnedBlog.author} was added.`)
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
-      setBlogTitle('')
-      setBlogAuthor('')
-      setBlogURL('')
+      // clear the inputs
     })
   }
 
@@ -148,16 +133,7 @@ const App = () => {
     return (
       <div>
         <Togglable buttonLabel="create blog" ref={blogFormRef}>
-        <BlogForm
-            author={author}
-            title={title}
-            url={url}
-            handleAuthorChange={({ target }) => setBlogAuthor(target.value)}
-            handleTitleChange={({ target }) => setBlogTitle(target.value)}
-            handleURLChange={({ target }) => setBlogURL(target.value)}
-            // handleSubmit={handleCreateBlog}
-            onSubmit={handleCreateBlog}
-          />
+        <BlogForm createBlog={createBlog}/>
         </Togglable>
       </div>
     )
