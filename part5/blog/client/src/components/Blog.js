@@ -3,7 +3,7 @@ import Togglable from './Togglable'
 import blogService from '../services/blogs'
 
 
-const Blog = ({ blog, updatedBlog}) => {
+const Blog = ({ blog, updatedBlog }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -18,23 +18,23 @@ const Blog = ({ blog, updatedBlog}) => {
     blogObject.likes += 1
 
     blogService
-    .update(blogObject.id, blogObject)
-    .then(returnedBlog => {
-      updatedBlog()
-    })
+      .update(blogObject.id, blogObject)
+      .then(() => {
+        updatedBlog()
+      })
   }
 
   const removeBlog = (blogObject) => {
     // console.log(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
     // blogService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
 
-    let result = window.confirm(`Remove blog '${blogObject.title}' by '${blogObject.author}'`);
+    let result = window.confirm(`Remove blog '${blogObject.title}' by '${blogObject.author}'`)
     if (result) {
       blogService
-      .remove(blogObject.id, blogObject)
-      .then(returnedBlog => {
-        updatedBlog()
-      })
+        .remove(blogObject.id, blogObject)
+        .then(() => {
+          updatedBlog()
+        })
     }
 
 
@@ -43,7 +43,7 @@ const Blog = ({ blog, updatedBlog}) => {
   return (
     <div style={blogStyle}>
       <div>
-        {blog.title} 
+        {blog.title}
         <Togglable buttonViewLabel="view" buttonHideLabel="hide">
           <p>{blog.url}</p>
           <p>likes: {blog.likes} <button onClick={() => addLike(blog)}>like</button></p>
@@ -53,7 +53,7 @@ const Blog = ({ blog, updatedBlog}) => {
           }
         </Togglable>
       </div>
-    </div>  
+    </div>
   )
 
 }
