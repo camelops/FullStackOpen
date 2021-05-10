@@ -14,6 +14,7 @@ const Blog = ({ blog, updatedBlog}) => {
   }
 
   const addLike = (blogObject) => {
+    console.log(blogObject)
 
     blogObject.likes += 1
 
