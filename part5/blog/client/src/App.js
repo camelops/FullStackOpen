@@ -127,9 +127,13 @@ const App = () => {
   const blogList = () => {
 
     const updatedBlog = () => {
-      blogService.getAll().then(blogs =>
+      blogService.getAll().then(blogs => {
+        blogs.sort(function (a, b) {
+          return a.likes - b.likes
+        })
+
         setBlogs( blogs )
-      )  
+      })
     }
 
     return (

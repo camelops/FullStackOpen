@@ -17,22 +17,28 @@ const unknownEndpoint = (request, response) => {
 
 const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
+  console.log(authorization)
   if (authorization && authorization.toLowerCase().startsWith('bearer ')){
+    console.log("completing TOKEN")
     request.token = authorization.substring(7)
   }
+  console.log("DONE TOKEN")
   next()
 }
 
 const userExtractor = async (request, response, next) => {
+  console.log('USER EXTRACTOR')
   if (!request.token){
+    console.log("token missing")
     return response.status(401).send({ error: 'token missing or invalid'})
   }
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
+    console.log('token cant decode')
     return response.status(401).send({ error: 'token missing or invalid'})
   }
   request.user = await User.findById(decodedToken.id)
-
+  console.log('USER EXTRACTOR DONE')
   next()
 }
 
