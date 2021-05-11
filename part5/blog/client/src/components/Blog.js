@@ -25,8 +25,6 @@ const Blog = ({ blog, updatedBlog }) => {
   }
 
   const removeBlog = (blogObject) => {
-    // console.log(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
-    // blogService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
 
     let result = window.confirm(`Remove blog '${blogObject.title}' by '${blogObject.author}'`)
     if (result) {
@@ -40,17 +38,23 @@ const Blog = ({ blog, updatedBlog }) => {
 
   }
 
+  const localUser = JSON.parse(window.localStorage.getItem('loggedBlogAppUser'))
+
+  let removeButton = null
+  if (localUser) {
+    if (localUser.username === blog.user.username) {
+      removeButton = <button onClick={() => removeBlog(blog)}>remove</button>
+    }
+  }
+
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       <div>
-        {blog.title}
+        {blog.title} by {blog.author}
         <Togglable buttonViewLabel="view" buttonHideLabel="hide">
           <p>{blog.url}</p>
-          <p>likes: {blog.likes} <button onClick={() => addLike(blog)}>like</button></p>
-          <p>{blog.author}</p>
-          {blog.user.username === JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).username &&
-            <button onClick={() => removeBlog(blog)}>remove</button>
-          }
+          <p className='likes'>likes: {blog.likes} <button onClick={() => addLike(blog)}>like</button></p>
+          {removeButton}
         </Togglable>
       </div>
     </div>
