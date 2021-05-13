@@ -47,7 +47,6 @@ describe('Blog app', function() {
 
       describe('When logged in with a blog post', function() {
         beforeEach(function() {
-          cy.login({ username: 'mluukkai', password: 'salainen' })
           cy.createBlog({
             title:'BigE2ETest',
             author:'Camelman',
@@ -68,6 +67,34 @@ describe('Blog app', function() {
             .contains('like')
             .click()
           cy.contains('likes: 1')
+        })
+        it('A blog can be deleted by the author', function() {
+          cy.contains('BigE2ETest')
+            .contains('view')
+            .click()
+          cy.contains('BigE2ETest')
+            .contains('remove')
+            .click()
+          cy.should('not.contain', 'BigE2ETest')
+        })
+
+        it('A blog cannot be deleted by the wrong author', function() {
+          cy.contains('logout')
+            .click()
+          // cy.login({ username: 'test', password: 'test123' })
+          cy.request('POST', 'http://localhost:3003/api/users', {
+            username: 'test', password: 'test123'
+          }).then(response => {
+            localStorage.setItem('loggedNoteappUser', JSON.stringify(response.body))
+            cy.visit('http://localhost:3000')
+          })
+          cy.login({ username: 'test', password: 'test123' })
+
+          cy.contains('BigE2ETest')
+            .contains('view')
+            .click()
+          cy.contains('BigE2ETest')
+            .should('not.contain', 'remove')
         })
       })
     })
