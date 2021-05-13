@@ -44,6 +44,32 @@ describe('Blog app', function() {
         cy.get('#submitBlog').click()
         cy.contains('Big Author')
       })
+
+      describe('When logged in with a blog post', function() {
+        beforeEach(function() {
+          cy.login({ username: 'mluukkai', password: 'salainen' })
+          cy.createBlog({
+            title:'BigE2ETest',
+            author:'Camelman',
+            url:'www.camelman.com'
+          })
+          cy.createBlog({
+            title:'smallTest',
+            author:'Cameldude',
+            url:'www.cameldude.com'
+          })
+        })
+        it('A blog can be liked', function() {
+          cy.contains('BigE2ETest')
+            .contains('view')
+            .click()
+          cy.contains('likes: 0')
+          cy.contains('BigE2ETest')
+            .contains('like')
+            .click()
+          cy.contains('likes: 1')
+        })
+      })
     })
   })
 })
