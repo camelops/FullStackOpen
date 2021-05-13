@@ -30,6 +30,20 @@ describe('Blog app', function() {
       cy.get('#login-button').click()
       cy.contains('Wrong credentials entered')
     })
-  })
 
+    describe('When logged in', function() {
+      beforeEach(function() {
+        cy.login({ username: 'mluukkai', password: 'salainen' })
+
+      })
+      it('A blog can be created', function() {
+        cy.contains('create blog').click()
+        cy.get('#title').type('Big Bad E2E Blog')
+        cy.get('#author').type('Big Author')
+        cy.get('#url').type('www.cypress.com')
+        cy.get('#submitBlog').click()
+        cy.contains('Big Author')
+      })
+    })
+  })
 })
