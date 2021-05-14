@@ -17,7 +17,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs => {
       blogs.sort(function (a, b) {
-        return a.likes - b.likes
+        return b.likes - a.likes
       })
 
       setBlogs( blogs )
@@ -130,7 +130,7 @@ const App = () => {
     const updatedBlog = () => {
       blogService.getAll().then(blogs => {
         blogs.sort(function (a, b) {
-          return a.likes - b.likes
+          return b.likes - a.likes
         })
 
         setBlogs( blogs )
@@ -140,9 +140,11 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} updatedBlog={updatedBlog} />
-        )}
+        <div id="blogList">
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} updatedBlog={updatedBlog} />
+          )}
+        </div>
       </div>
     )
   }

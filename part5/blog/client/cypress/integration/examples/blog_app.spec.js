@@ -46,16 +46,22 @@ describe('Blog app', function() {
       })
 
       describe('When logged in with a blog post', function() {
-        beforeEach(function() {
-          cy.createBlog({
+        const blogList = [
+          {
             title:'BigE2ETest',
             author:'Camelman',
             url:'www.camelman.com'
-          })
-          cy.createBlog({
+          },
+          {
             title:'smallTest',
             author:'Cameldude',
             url:'www.cameldude.com'
+          }
+        ]
+
+        beforeEach(function() {
+          blogList.forEach((item) => {
+            cy.createBlog(item)
           })
         })
         it('A blog can be liked', function() {
@@ -89,12 +95,26 @@ describe('Blog app', function() {
             cy.visit('http://localhost:3000')
           })
           cy.login({ username: 'test', password: 'test123' })
-
           cy.contains('BigE2ETest')
             .contains('view')
             .click()
           cy.contains('BigE2ETest')
             .should('not.contain', 'remove')
+        })
+
+        it('Blogs are ordered with most likes first', function() {
+          cy.contains('BigE2ETest')
+            .contains('view')
+            .click()
+          cy.contains('BigE2ETest')
+            .contains('like')
+            .click()
+
+          cy.get('#blogList').each((item, index) => {
+            cy
+              .wrap(item)
+              .should('contain.text', blogList[index].title)
+          })
         })
       })
     })
