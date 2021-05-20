@@ -19,6 +19,10 @@ const App = () => {
     dispatch(addAnecdote(content))
   }
 
+  anecdotes.sort(function(a, b) {
+    return b.votes - a.votes
+  })
+
   return (
     <div>
       <h2>Anecdotes</h2>
