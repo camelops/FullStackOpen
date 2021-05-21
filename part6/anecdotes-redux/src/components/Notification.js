@@ -11,11 +11,11 @@ const Notification = () => {
     borderWidth: 1
   }
 
-
+  console.log(notification)
 
   return (
     <div style={style}>
-      { notification }
+      { notification.message}
     </div>
   )
 }
