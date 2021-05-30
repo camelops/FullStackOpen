@@ -5,13 +5,22 @@ const initialMessage = {
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
-export const notify = (message) => {
-  return {
-    type: 'NOTIFY',
-    data: {
-      message: message,
-      id: getId()
-    }
+export const notify = (message, length) => {
+  return async dispatch => {
+    dispatch({
+      type: 'NOTIFY',
+      data: {
+        message: message,
+        id: getId()
+      }
+    })
+    let timeout = Number(length) * 1000
+    console.log(timeout)
+    setTimeout(function () {
+      dispatch({
+        type: 'CLEAR_NOTIFICATION'
+      })
+    }, timeout)
   }
 }
 
