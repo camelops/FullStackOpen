@@ -19,7 +19,7 @@ const AnecdoteList = () => {
   const vote = async (anecdote) => {
     console.log('vote', anecdote)
     dispatch(addVote(anecdote))
-    dispatch(notify(`you voted '${anecdote.content}'`), 5)
+    dispatch(notify(`you voted '${anecdote.content}'`, 2))
   }
 
   anecdotes.sort(function(a, b) {

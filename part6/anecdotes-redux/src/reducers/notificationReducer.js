@@ -6,7 +6,13 @@ const initialMessage = {
 const getId = () => (100000 * Math.random()).toFixed(0)
 
 export const notify = (message, length) => {
+  console.log(length)
   return async dispatch => {
+    
+    setTimeout(() => dispatch({
+      type: 'CLEAR_NOTIFICATION'
+    }), length * 1000)
+
     dispatch({
       type: 'NOTIFY',
       data: {
@@ -14,21 +20,16 @@ export const notify = (message, length) => {
         id: getId()
       }
     })
-    let timeout = Number(length) * 1000
-    console.log(timeout)
-    setTimeout(function () {
-      dispatch({
-        type: 'CLEAR_NOTIFICATION'
-      })
-    }, timeout)
+
   }
 }
 
-export const clearNotification = () => {
-  return {
-    type: 'CLEAR_NOTIFICATION',
-  }
-}
+
+
+// export const clearNotification = (length) => {
+//   return dispatch =>{
+//     setTimeout(() => dispatch({type: 'CLEAR_NOTIFICATION'}), length * 1000)
+// }}
 
 const reducer = (state = initialMessage, action) => {
   console.log('state now: ', state)
