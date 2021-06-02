@@ -20,7 +20,7 @@ const Filter = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  return state.filter
+  return {filter : state.filter}
 }
 
 const mapDispatchToProps = {
