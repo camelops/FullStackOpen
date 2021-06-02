@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 // import { useSelector } from 'react-redux'
 
 const Notification = (props) => {
-  // const notification = useSelector(state => state.notification)
+  // const notification = useSelector(state => state.notification)ss
 
   const style = {
     border: 'solid',
