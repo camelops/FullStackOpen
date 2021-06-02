@@ -25,15 +25,12 @@ export const notify = (message, length) => {
 }
 
 
-
 // export const clearNotification = (length) => {
 //   return dispatch =>{
 //     setTimeout(() => dispatch({type: 'CLEAR_NOTIFICATION'}), length * 1000)
 // }}
 
 const reducer = (state = initialMessage, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
   switch (action.type) {
     case 'NOTIFY': {
       return {

@@ -11,7 +11,6 @@ const asObject = (anecdote) => {
 }
 
 export const addVote = (anecdote) => {
-  console.log("VOTING")
   return async dispatch => {
     const updatedAnecdote = await anecdoteService.addVote(anecdote)
     dispatch({
@@ -43,8 +42,6 @@ export const initializeAnecdotes = () => {
 }
 
 const reducer = (state = [], action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
   switch (action.type) {
     case 'VOTE': {
       const id = action.data.id
