@@ -1,13 +1,4 @@
 import React, { useState } from 'react'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  useRouteMatch,
-  useHistory,
-} from "react-router-dom"
 
 const Menu = () => {
   const padding = {
@@ -26,11 +17,7 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => 
-        <li key={anecdote.id}>
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-        </li>
-      )}
+      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
     </ul>
   </div>
 )
@@ -96,21 +83,6 @@ const CreateNew = (props) => {
 
 }
 
-const Anecdote = ({ anecdote }) => {
-  if (anecdote === null) {
-    return (
-      <div />
-    )
-  }
-  return (
-    <div>
-      <h2>{anecdote.content}</h2>
-      <div>{anecdote.author}</div>
-    </div>
-  )
-}
-
-
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -118,14 +90,14 @@ const App = () => {
       author: 'Jez Humble',
       info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
       votes: 0,
-      id: 1
+      id: '1'
     },
     {
       content: 'Premature optimization is the root of all evil',
       author: 'Donald Knuth',
       info: 'http://wiki.c2.com/?PrematureOptimization',
       votes: 0,
-      id: 2
+      id: '2'
     }
   ])
 
@@ -150,45 +122,14 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
-  const padding = {
-    padding: 5
-  }
-
-  const match = useRouteMatch('/anecdotes/:id')
-  const anecdote = match 
-    ? anecdotes.find(anecdote => anecdote.id === Number(match.params.id))
-    : null
-  console.log(match)
-  console.log(anecdote)
-
   return (
     <div>
-      <div>
-        <Link style={padding} to="/">anecdotes</Link>
-        <Link style={padding} to="/create">create new</Link>
-        <Link style={padding} to="/about">about</Link>
-      </div>
-
       <h1>Software anecdotes</h1>
-
-      <Switch>
-        <Route path="/create">
-          <CreateNew />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/anecdotes/:id">
-          <Anecdote anecdote={anecdote} />
-        </Route>
-        <Route path="/">
-          <AnecdoteList anecdotes={anecdotes} />
-        </Route>
-      </Switch>
-
-      <div>
-        <Footer />
-      </div>
+      <Menu />
+      <AnecdoteList anecdotes={anecdotes} />
+      <About />
+      <CreateNew addNew={addNew} />
+      <Footer />
     </div>
   )
 }
