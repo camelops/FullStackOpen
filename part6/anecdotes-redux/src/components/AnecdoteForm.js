@@ -2,8 +2,27 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addAnecdote } from '../reducers/anecdoteReducer'
 import { notify } from '../reducers/notificationReducer'
+import { useState } from 'react'
+
+const useField = (type) => {
+  const [value, setValue] = useState('')
+
+  const onChange = (event) => {
+    setValue(event.target.value)
+  }
+
+  return {
+    type,
+    value,
+    onChange
+  }
+}
+
 
 const AnecdoteForm = (props) => {
+  const content = useField('text')
+  const author = useField('text')
+  const url = useField('text')
 
   const newAnecdote = async (event) => {
     event.preventDefault()

@@ -71,6 +71,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.history.push('/')
   }
 
   return (
@@ -112,6 +113,8 @@ const Anecdote = ({ anecdote }) => {
 
 
 const App = () => {
+  const history = useHistory();
+
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -129,11 +132,20 @@ const App = () => {
     }
   ])
 
+  console.log(anecdotes)
+
+
   const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
-    anecdote.id = (Math.random() * 10000).toFixed(0)
+    anecdote.id = Number((Math.random() * 10000).toFixed(0))
+    console.log(anecdote)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote "${anecdote.content}" created!`)
+    setTimeout(function(){
+      setNotification('')
+    }, 5000)
+
   }
 
   const anecdoteById = (id) =>
@@ -167,13 +179,15 @@ const App = () => {
         <Link style={padding} to="/">anecdotes</Link>
         <Link style={padding} to="/create">create new</Link>
         <Link style={padding} to="/about">about</Link>
+        <p>{notification}</p>
       </div>
+      
 
       <h1>Software anecdotes</h1>
 
       <Switch>
         <Route path="/create">
-          <CreateNew />
+          <CreateNew addNew={addNew} history={history}/>
         </Route>
         <Route path="/about">
           <About />
