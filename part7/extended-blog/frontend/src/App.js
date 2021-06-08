@@ -7,13 +7,18 @@ import NewBlog from './components/NewBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './utils/storage'
+import { useDispatch } from 'react-redux'
+
+import { notify } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [notification, setNotification] = useState(null)
+  const dispatch = useDispatch()
+
+  // const [notification, setNotification] = useState(null)
 
   const blogFormRef = React.createRef()
 
@@ -28,14 +33,14 @@ const App = () => {
     setUser(user)
   }, [])
 
-  const notifyWith = (message, type='success') => {
-    setNotification({
-      message, type
-    })
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
-  }
+  // const notifyWith = (message, type='success') => {
+  //   setNotification({
+  //     message, type
+  //   })
+  //   setTimeout(() => {
+  //     setNotification(null)
+  //   }, 5000)
+  // }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -47,10 +52,12 @@ const App = () => {
       setUsername('')
       setPassword('')
       setUser(user)
-      notifyWith(`${user.name} welcome back!`)
+      dispatch(notify(`${user.name} welcome back!`, 5, 'success'))
+      // notifyWith(`${user.name} welcome back!`)
       storage.saveUser(user)
     } catch(exception) {
-      notifyWith('wrong username/password', 'error')
+      dispatch(notify('wrong username/password', 5, 'error'))
+      // notifyWith('wrong username/password', 'error')
     }
   }
 
@@ -59,7 +66,8 @@ const App = () => {
       const newBlog = await blogService.create(blog)
       blogFormRef.current.toggleVisibility()
       setBlogs(blogs.concat(newBlog))
-      notifyWith(`a new blog '${newBlog.title}' by ${newBlog.author} added!`)
+      dispatch(notify(`a new blog '${newBlog.title}' by ${newBlog.author} added!`, 5, 'success'))
+      // notifyWith(`a new blog '${newBlog.title}' by ${newBlog.author} added!`)
     } catch(exception) {
       console.log(exception)
     }
@@ -91,7 +99,7 @@ const App = () => {
       <div>
         <h2>login to application</h2>
 
-        <Notification notification={notification} />
+        <Notification />
 
         <form onSubmit={handleLogin}>
           <div>
@@ -118,11 +126,13 @@ const App = () => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
+  console.log(blogs)
+
   return (
     <div>
       <h2>blogs</h2>
 
-      <Notification notification={notification} />
+      <Notification />
 
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
