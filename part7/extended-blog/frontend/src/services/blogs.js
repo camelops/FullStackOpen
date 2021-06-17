@@ -15,7 +15,13 @@ const getAll = () => {
 }
 
 const create = (blog) => {
-  const request = axios.post(baseUrl, blog, getConfig())
+  const object = {
+    title: blog.title,
+    author: blog.author,
+    url: blog.url,
+    likes: 0,
+  }
+  const request = axios.post(baseUrl, object, getConfig())
   return request.then(response => response.data)
 }
 
