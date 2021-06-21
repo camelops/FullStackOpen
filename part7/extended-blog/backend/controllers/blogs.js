@@ -26,7 +26,7 @@ router.delete('/:id', async (request, response) => {
   await blog.remove()
   user.blogs = user.blogs.filter(b => b.id.toString() !== request.params.id.toString())
   await user.save()
-  response.status(204).end()
+  response.status(200).send(request.params.id)
 })
 
 router.put('/:id', async (request, response) => {
